@@ -1,0 +1,24 @@
+# Ignore Python cache and environment folders
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Ignore venv folders
+venv/
+env/
+Scripts/
+Lib/
+Include/
+
+# Ignore test reports and Playwright output
+test-results/
+videos/
+screenshots/
+reports_html/
+
+# Keep the .github folder for CI
+!.github/
