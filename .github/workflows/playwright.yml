@@ -12,30 +12,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ✅ Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      # ✅ Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
+      # ✅ Step 3: Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest-html
 
+      # ✅ Step 4: Install Playwright browsers
       - name: Install Playwright browsers
         run: python -m playwright install --with-deps
 
-      # ✅ Use CI-specific pytest config to skip HTML report
+      # ✅ Step 5: Run Playwright tests (using CI config)
       - name: Run Playwright tests
-        run: pytest -c pytest_ci.ini --tracing=retain-on-failure
+        run: |
+          echo "✅ Using CI-specific pytest configuration"
+          pytest -c pytest_ci.ini --tracing=retain-on-failure
 
-      - name: Upload test traces
+      # ✅ Step 6: Upload traces and test artifacts
+      - name: Upload Playwright test results
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-traces
-          path: test-results/
+          name: playwright-artifacts
+          path: |
+            test-results/
+            playwright_output/
