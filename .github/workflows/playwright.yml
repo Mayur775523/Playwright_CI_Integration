@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ✅ Step 1: Checkout repo
+      # ✅ Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v5
 
@@ -33,18 +33,20 @@ jobs:
       - name: Install Playwright browsers
         run: python -m playwright install --with-deps
 
-      # ✅ Step 5: Run Playwright tests (using CI config)
+      # ✅ Step 5: Run Playwright tests using CI config
       - name: Run Playwright tests
         run: |
           echo "✅ Using CI-specific pytest configuration"
           pytest -c pytest_ci.ini --tracing=retain-on-failure
 
-      # ✅ Step 6: Upload traces and test artifacts
-      - name: Upload Playwright test results
+      # ✅ Step 6: Upload Playwright artifacts (videos, screenshots, traces)
+      - name: Upload Playwright artifacts
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: always()  # upload even if tests fail
         with:
           name: playwright-artifacts
           path: |
-            test-results/
             playwright_output/
+            videos/
+            screenshots/
+          if-no-files-found: ignore
